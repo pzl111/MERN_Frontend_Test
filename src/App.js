@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch(`https://mern-backend-test-clc8pjrcv-zai-lians-projects.vercel.app/api/products`)
+      const response = await fetch(`https://mern-backend-test-eight.vercel.app/api/products`)
       const json = await response.json()
       if (response.status == 200) {
         console.log(json)
