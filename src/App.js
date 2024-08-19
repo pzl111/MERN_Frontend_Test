@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch("http://localhost:4000/api/products")
+      const response = await fetch(`${process.env.SERVER_URI}/api/products`)
       const json = await response.json()
       if (response.status == 200) {
         console.log(json)
