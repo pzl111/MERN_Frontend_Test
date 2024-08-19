@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { ProductsContext } from "../context/ProductContext"
 
-function ProductItem({ product, setCurrentProduct, setEditing }) {
+function ProductItem({ product, setCurrentProduct }) {
 
   const { dispatch } = useContext(ProductsContext)
 
@@ -11,14 +11,13 @@ function ProductItem({ product, setCurrentProduct, setEditing }) {
     })
     const json = await response.json()
     if (response.status == 200) {
-      console.log(json)
       dispatch({ type: "DELETE", payload: json })
     }
   }
 
   const handleEdit = () => {
-    setCurrentProduct(product)
-    setEditing(true)
+    dispatch({ type: "SET_CURRENT_PRODUCT", payload: product })
+    dispatch({ type: "ENABLE_EDIT" })
   }
 
   return (

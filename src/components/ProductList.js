@@ -1,10 +1,15 @@
+import { useContext } from "react"
 import ProductItem from "./ProductItem"
+import { ProductsContext } from "../context/ProductContext"
 
-function ProductList({ products, setCurrentProduct, setEditing }) {
+function ProductList() {
+
+    const { products } = useContext(ProductsContext)
+
     return (
         <>
             {products && products.map((product) => (
-                <ProductItem key={product._id} product={product} setCurrentProduct={setCurrentProduct} setEditing={setEditing}></ProductItem>
+                <ProductItem key={product._id} product={product} ></ProductItem>
             ))}
         </>
     )

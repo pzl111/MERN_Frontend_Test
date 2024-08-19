@@ -1,42 +1,30 @@
 import { useContext, useState } from "react"
 import { ProductsContext } from "../context/ProductContext"
 
-function ProductForm({ currentProduct, setCurrentProduct, isEditing, setEditing }) {
+function ProductForm() {
 
-    const { dispatch } = useContext(ProductsContext)
+    const { dispatch, isEditing, currentProduct } = useContext(ProductsContext)
 
     const cancelEdit = () => {
-        setEditing(false)
-        setCurrentProduct({
-            _id: "",
-            name: "",
-            price: 0,
-            quantity: 0
-        })
+        dispatch({ type: "DISABLE_EDIT" })
+        dispatch({ type: "RESET_CURRENT_PRODUCT" })
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         if (!isEditing) {
-            currentProduct = { ...currentProduct, _id: undefined }
             const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/api/products`, {
                 method: "POST",
-                body: JSON.stringify(currentProduct),
+                body: JSON.stringify({ ...currentProduct, _id: undefined }),
                 headers: {
                     "Content-Type": "application/json"
                 }
             })
             const json = await response.json()
-            console.log(json)
             if (response.status == 201) {
-                setCurrentProduct({
-                    _id: "",
-                    name: "",
-                    price: 0,
-                    quantity: 0
-                })
                 console.log("New product added", json)
+                dispatch({ type: "RESET_CURRENT_PRODUCT" })
                 dispatch({ type: "CREATE", payload: json })
             } else {
                 console.log(json.message)
@@ -50,17 +38,11 @@ function ProductForm({ currentProduct, setCurrentProduct, isEditing, setEditing 
                 }
             })
             const json = await response.json()
-            console.log(json)
             if (response.status == 200) {
-                setCurrentProduct({
-                    _id: "",
-                    name: "",
-                    price: 0,
-                    quantity: 0
-                })
-                setEditing(false)
-                console.log("New product added", json)
+                console.log("Product updated", json)
+                dispatch({ type: "DISABLE_EDIT" })
                 dispatch({ type: "UPDATE", payload: json })
+                dispatch({ type: "RESET_CURRENT_PRODUCT" })
             } else {
                 console.log(json.message)
             }
@@ -74,23 +56,22 @@ function ProductForm({ currentProduct, setCurrentProduct, isEditing, setEditing 
             <input type="text" name="_id" value={currentProduct._id} style={{ marginBottom: "0.5rem" }} disabled></input>
             <br />
             <label htmlFor="name">Name: </label>
-            <input type="text" name="name" placeholder="name" value={currentProduct.name} onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })} style={{ marginBottom: "0.5rem" }}></input>
+            <input type="text" name="name" placeholder="name" value={currentProduct.name} onChange={(e) => dispatch({ type: "SET_CURRENT_PRODUCT", payload: { ...currentProduct, name: e.target.value } })} style={{ marginBottom: "0.5rem" }}></input>
             <br />
             <label htmlFor="price">Price: </label>
-            <input type="number" name="price" placeholder="price" value={currentProduct.price} onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })} style={{ marginBottom: "0.5rem" }}></input>
+            <input type="number" name="price" placeholder="price" value={currentProduct.price} onChange={(e) => dispatch({ type: "SET_CURRENT_PRODUCT", payload: { ...currentProduct, price: e.target.value } })} style={{ marginBottom: "0.5rem" }}></input>
             <br />
             <label htmlFor="quantity">Quantity: </label>
-            <input type="number" name="quantity" placeholder="quantity" value={currentProduct.quantity} onChange={(e) => setCurrentProduct({ ...currentProduct, quantity: e.target.value })} style={{ marginBottom: "0.5rem" }}></input>
+            <input type="number" name="quantity" placeholder="quantity" value={currentProduct.quantity} onChange={(e) => dispatch({ type: "SET_CURRENT_PRODUCT", payload: { ...currentProduct, quantity: e.target.value } })} style={{ marginBottom: "0.5rem" }}></input>
             <br />
             {isEditing ?
                 (
                     <>
                         <button>Update</button>
-                        <button onClick={cancelEdit} style={{marginLeft: "0.5rem"}}>Cancel</button>
+                        <button onClick={cancelEdit} style={{ marginLeft: "0.5rem" }}>Cancel</button>
                     </>
-                ) : (
-                    <button>Create</button>
-                )}
+                ) : <button>Create</button>
+            }
         </form>
     )
 }
