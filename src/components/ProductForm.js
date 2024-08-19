@@ -15,7 +15,7 @@ function ProductForm() {
         const product = { name, price, quantity }
         console.log(product)
 
-        const response = await fetch(`${process.env.SERVER_URI}/api/products`, {
+        const response = await fetch(`https://mern-backend-test-eight.vercel.app/api/products`, {
             method: "POST",
             body: JSON.stringify(product),
             headers: {

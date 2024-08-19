@@ -6,7 +6,7 @@ function ProductItem({ product }) {
   const { dispatch } = useContext(ProductsContext)
 
   const handleClick = async () => {
-    const response = await fetch(`${process.env.SERVER_URI}/api/products/` + product._id, {
+    const response = await fetch(`https://mern-backend-test-eight.vercel.app/api/products/` + product._id, {
       method: "DELETE"
     })
     const json = await response.json()
