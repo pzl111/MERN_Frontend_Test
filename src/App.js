@@ -36,7 +36,7 @@ function App() {
         }}
       />
 
-      <button onClick={() => googleLogout()}>Logout</button>
+      <button onClick={() => {console.log("logout"); googleLogout()}}>Logout</button>
       <div style={{ display: "flex", height: "100vh" }}>
         <div style={{ width: "50%", height: "100%", overflowY: "scroll" }}>
           <ProductList />
