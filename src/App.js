@@ -3,6 +3,9 @@ import { useContext, useEffect, useState } from 'react';
 import ProductForm from './components/ProductForm';
 import { ProductsContext } from './context/ProductContext';
 import ProductList from './components/ProductList';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
+import { googleLogout } from '@react-oauth/google';
 
 
 function App() {
@@ -22,6 +25,18 @@ function App() {
 
   return (
     <div className="App">
+      <GoogleLogin
+        onSuccess={credentialResponse => {
+          console.log(credentialResponse);
+          const decoded = jwtDecode(credentialResponse?.credential);
+          console.log(decoded);
+        }}
+        onError={() => {
+          console.log('Login Failed');
+        }}
+      />
+
+      <button onClick={() => googleLogout()}>Logout</button>
       <div style={{ display: "flex", height: "100vh" }}>
         <div style={{ width: "50%", height: "100%", overflowY: "scroll" }}>
           <ProductList />
